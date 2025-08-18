@@ -118,6 +118,191 @@ bool Kiem_Tra_Hang_Cot (int I,int J,int i,int j,int u){
   if(r[u] == 0) return true;
   return false;
 }
+void De_Quy(short** b, short* a, short** c, int i){
+  if (i == 9){
+    for (int j=0;j<9;j++)
+      c[j][a[j]]++;
+    return;
+  }
+  if (b[i][0] == -1){
+    a[i] = 0;
+    De_Quy(b,a,c,i+1);
+  }
+  else{
+    for (int j=0;j<9;j++){
+      if(b[i][j] != 0){ // Chi lua chon cac phan tu khac 0 (tuc co de xuat)
+        short dem=0;
+        // Kiem tra cac phan tu da lay co trung voi phan tu dang xet khong
+        for (int k=0;k<i;k++)
+          if(a[k] == j+1) dem++;
+        if(dem == 0){
+          a[i] = j+1; // Chon gia tri j
+          De_Quy(b,a,c,i+1); // Chon tiep phan tu sau do cua a
+        } 
+      }
+    }
+  }
+  a[i] = 0;
+  return;
+}
+void De_Xuat_Nhu_Nhau_v2(){
+  // for(int I=0;I<3;I++)
+  //   for(int i=0;i<3;i++){
+  //     for(int J=0;J<3;J++){
+  //       printf("\n");
+  //       for(int j=0;j<3;j++){
+  //         for(int k = 1;k<=9;k++)
+  //           printf("%d ", stu[I][J][i][j].kn[k]);
+  //         printf("\n");  
+  //       }
+        
+  //     printf("\n");
+  //     char u = getch();}
+  //   }
+
+  for(int I=0;I<3;I++)
+    for(int i=0;i<3;i++){ // Xet tung dong
+      // Cấp bộ nhớ
+      short* a = (short*)malloc(sizeof(short)*9);
+      for (int i1=0;i1<9;i1++)
+        a[i1] = 0;
+      short** c = (short**)malloc(sizeof(short*)*9);
+      for (int i1=0;i1<9;i1++)
+        c[i1] = (short*)malloc(sizeof(short)*10);
+      for (int i1=0;i1<9;i1++)
+        for(int j1=0;j1<10;j1++)
+          c[i1][j1]=0;
+      short** b = (short**)malloc(9*sizeof(short*));
+      for (int i1=0;i1<9;i1++)
+        b[i1] = (short*)malloc(9*sizeof(short)); 
+      
+      // Lay de xuat cua tung o 
+      for(int J=0;J<3;J++)
+        for(int j=0;j<3;j++){
+          if(stu[I][J][i][j].mang != 0){
+            for(int k=0;k<9;k++)
+              b[J*3+j][k] = -1;
+          }
+          else{
+            for(int k=0;k<9;k++)
+              b[J*3+j][k] = (short)stu[I][J][i][j].kn[k+1];
+          }
+        }
+      // // Kiem tra b
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<9;j1++)
+      //     printf("%hi ", b[i1][j1]);
+      //   printf("\n");
+      // }
+      // char k = getch();
+      De_Quy(b, a, c, 0);
+
+      // Kiem tra c
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<10;j1++)
+      //     printf("%hi ", c[i1][j1]);
+      //   printf("\n");
+      // }
+      // char k = getch();
+
+      // Loai bo cac vi tri khong xuat hien trong c
+      for(int i1=0;i1<9;i1++)
+        for(int j1=0;j1<9;j1++)
+        if(c[i1][j1+1] == 0 && b[i1][j1] > 0){
+          stu[I][i1/3][i][i1-(i1/3)*3].kn[j1+1]=0;
+          stu[I][i1/3][i][i1-(i1/3)*3].sl--;
+        }
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<9;j1++)
+      //     printf("%d ", stu[I][i1/3][i][i1-(i1/3)*3].kn[j1+1]);
+      //   printf("\n");
+      // }
+      // k=getch();
+      // Giai phong bo nho 
+      free(a);
+      for (int i1=0;i1<9;i1++)
+        free(c[i1]);
+      free(c);
+      for (int i1=0;i1<9;i1++)
+        free(b[i1]);
+      free(b); 
+  }
+
+  // Xet cot
+  for(int J=0;J<3;J++)
+  for(int j=0;j<3;j++){ // Xet tung cot
+    // Cấp bộ nhớ
+    short* a = (short*)malloc(sizeof(short)*9);
+    for (int i1=0;i1<9;i1++)
+      a[i1] = 0;
+    short** c = (short**)malloc(sizeof(short*)*9);
+    for (int i1=0;i1<9;i1++)
+      c[i1] = (short*)malloc(sizeof(short)*10);
+    for (int i1=0;i1<9;i1++)
+      for(int j1=0;j1<10;j1++)
+        c[i1][j1]=0;
+    short** b = (short**)malloc(9*sizeof(short*));
+    for (int i1=0;i1<9;i1++)
+      b[i1] = (short*)malloc(9*sizeof(short)); 
+    
+    // Lay de xuat cua tung o 
+    for(int I=0;I<3;I++)
+      for(int i=0;i<3;i++){
+        if(stu[I][J][i][j].mang != 0){
+          for(int k=0;k<9;k++)
+            b[I*3+i][k] = -1;
+        }
+        else{
+          for(int k=0;k<9;k++)
+            b[I*3+i][k] = (short)stu[I][J][i][j].kn[k+1];
+        }
+      }
+    // // Kiem tra b
+    // printf("\n");
+    // for(int i1=0;i1<9;i1++){
+    //   for(int j1=0;j1<9;j1++)
+    //     printf("%hi ", b[i1][j1]);
+    //   printf("\n");
+    // }
+    // char k = getch();
+    De_Quy(b, a, c, 0);
+
+    // Kiem tra c
+    // printf("\n");
+    // for(int i1=0;i1<9;i1++){
+    //   for(int j1=0;j1<10;j1++)
+    //     printf("%hi ", c[i1][j1]);
+    //   printf("\n");
+    // }
+    // char k = getch();
+
+    // Loai bo cac vi tri khong xuat hien trong c
+    for(int i1=0;i1<9;i1++)
+      for(int j1=0;j1<9;j1++)
+      if(c[i1][j1+1] == 0 && b[i1][j1] > 0){
+        stu[i1/3][J][i1-(i1/3)*3][j].kn[j1+1]=0;
+        stu[i1/3][J][i1-(i1/3)*3][j].sl--;
+      }
+    // printf("\n");
+    // for(int i1=0;i1<9;i1++){
+    //   for(int j1=0;j1<9;j1++)
+    //     printf("%d ", stu[I][i1/3][i][i1-(i1/3)*3].kn[j1+1]);
+    //   printf("\n");
+    // }
+    // k=getch();
+    // Giai phong bo nho 
+    free(a);
+    for (int i1=0;i1<9;i1++)
+      free(c[i1]);
+    free(c);
+    for (int i1=0;i1<9;i1++)
+      free(b[i1]);
+    free(b); 
+}
+}
 void De_Xuat_Nhu_Nhau(){
   int stu_kn[3][3][3][3]; // Tạo biến lưu giá trị đề xuất chuyển từ mảng -> số
   // Chuyển giá trị đề xuất từ mảng thành số  
@@ -323,15 +508,11 @@ void Dien_Cho_Trong (){
     // Không thể điền thêm do trường hợp: nếu trong hàng || cột || ô có 2 ô đều có duy nhất 2 giá trị đều xuất như nhau 
     if(l == 100){
       De_Xuat_Nhu_Nhau();
+      De_Xuat_Nhu_Nhau_v2();
     }
     l = 100;
   }
 }
-
-
-
-
-
 int main(){
   Khoi_Tao();
   Nhap_Phan_Tu();
