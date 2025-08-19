@@ -233,75 +233,75 @@ void De_Xuat_Nhu_Nhau_v2(){
 
   // Xet cot
   for(int J=0;J<3;J++)
-  for(int j=0;j<3;j++){ // Xet tung cot
-    // Cấp bộ nhớ
-    short* a = (short*)malloc(sizeof(short)*9);
-    for (int i1=0;i1<9;i1++)
-      a[i1] = 0;
-    short** c = (short**)malloc(sizeof(short*)*9);
-    for (int i1=0;i1<9;i1++)
-      c[i1] = (short*)malloc(sizeof(short)*10);
-    for (int i1=0;i1<9;i1++)
-      for(int j1=0;j1<10;j1++)
-        c[i1][j1]=0;
-    short** b = (short**)malloc(9*sizeof(short*));
-    for (int i1=0;i1<9;i1++)
-      b[i1] = (short*)malloc(9*sizeof(short)); 
-    
-    // Lay de xuat cua tung o 
-    for(int I=0;I<3;I++)
-      for(int i=0;i<3;i++){
-        if(stu[I][J][i][j].mang != 0){
-          for(int k=0;k<9;k++)
-            b[I*3+i][k] = -1;
+    for(int j=0;j<3;j++){ // Xet tung cot
+      // Cấp bộ nhớ
+      short* a = (short*)malloc(sizeof(short)*9);
+      for (int i1=0;i1<9;i1++)
+        a[i1] = 0;
+      short** c = (short**)malloc(sizeof(short*)*9);
+      for (int i1=0;i1<9;i1++)
+        c[i1] = (short*)malloc(sizeof(short)*10);
+      for (int i1=0;i1<9;i1++)
+        for(int j1=0;j1<10;j1++)
+          c[i1][j1]=0;
+      short** b = (short**)malloc(9*sizeof(short*));
+      for (int i1=0;i1<9;i1++)
+        b[i1] = (short*)malloc(9*sizeof(short)); 
+      
+      // Lay de xuat cua tung o 
+      for(int I=0;I<3;I++)
+        for(int i=0;i<3;i++){
+          if(stu[I][J][i][j].mang != 0){
+            for(int k=0;k<9;k++)
+              b[I*3+i][k] = -1;
+          }
+          else{
+            for(int k=0;k<9;k++)
+              b[I*3+i][k] = (short)stu[I][J][i][j].kn[k+1];
+          }
         }
-        else{
-          for(int k=0;k<9;k++)
-            b[I*3+i][k] = (short)stu[I][J][i][j].kn[k+1];
+      // // Kiem tra b
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<9;j1++)
+      //     printf("%hi ", b[i1][j1]);
+      //   printf("\n");
+      // }
+      // char k = getch();
+      De_Quy(b, a, c, 0);
+
+      // Kiem tra c
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<10;j1++)
+      //     printf("%hi ", c[i1][j1]);
+      //   printf("\n");
+      // }
+      // char k = getch();
+
+      // Loai bo cac vi tri khong xuat hien trong c
+      for(int i1=0;i1<9;i1++)
+        for(int j1=0;j1<9;j1++)
+        if(c[i1][j1+1] == 0 && b[i1][j1] > 0){
+          stu[i1/3][J][i1-(i1/3)*3][j].kn[j1+1]=0;
+          stu[i1/3][J][i1-(i1/3)*3][j].sl--;
         }
-      }
-    // // Kiem tra b
-    // printf("\n");
-    // for(int i1=0;i1<9;i1++){
-    //   for(int j1=0;j1<9;j1++)
-    //     printf("%hi ", b[i1][j1]);
-    //   printf("\n");
-    // }
-    // char k = getch();
-    De_Quy(b, a, c, 0);
-
-    // Kiem tra c
-    // printf("\n");
-    // for(int i1=0;i1<9;i1++){
-    //   for(int j1=0;j1<10;j1++)
-    //     printf("%hi ", c[i1][j1]);
-    //   printf("\n");
-    // }
-    // char k = getch();
-
-    // Loai bo cac vi tri khong xuat hien trong c
-    for(int i1=0;i1<9;i1++)
-      for(int j1=0;j1<9;j1++)
-      if(c[i1][j1+1] == 0 && b[i1][j1] > 0){
-        stu[i1/3][J][i1-(i1/3)*3][j].kn[j1+1]=0;
-        stu[i1/3][J][i1-(i1/3)*3][j].sl--;
-      }
-    // printf("\n");
-    // for(int i1=0;i1<9;i1++){
-    //   for(int j1=0;j1<9;j1++)
-    //     printf("%d ", stu[I][i1/3][i][i1-(i1/3)*3].kn[j1+1]);
-    //   printf("\n");
-    // }
-    // k=getch();
-    // Giai phong bo nho 
-    free(a);
-    for (int i1=0;i1<9;i1++)
-      free(c[i1]);
-    free(c);
-    for (int i1=0;i1<9;i1++)
-      free(b[i1]);
-    free(b); 
-}
+      // printf("\n");
+      // for(int i1=0;i1<9;i1++){
+      //   for(int j1=0;j1<9;j1++)
+      //     printf("%d ", stu[I][i1/3][i][i1-(i1/3)*3].kn[j1+1]);
+      //   printf("\n");
+      // }
+      // k=getch();
+      // Giai phong bo nho 
+      free(a);
+      for (int i1=0;i1<9;i1++)
+        free(c[i1]);
+      free(c);
+      for (int i1=0;i1<9;i1++)
+        free(b[i1]);
+      free(b); 
+ }
 }
 void De_Xuat_Nhu_Nhau(){
   int stu_kn[3][3][3][3]; // Tạo biến lưu giá trị đề xuất chuyển từ mảng -> số
